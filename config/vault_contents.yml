@@ -1,0 +1,61 @@
+# this config file is useful if you don't want to run vault
+# agents with canvas.  Local Development is the most common case
+# for this, but a small OSS deployment might have it make sense too.
+# Just provide the results data you want the Vault class to "read",
+# and it will return it when a call for vault data is issued. Data should be
+# shaped like the example below.  Each environment can get a hash,
+# there's a key for each read path, and a hash for the returned data
+development:
+  'sts/testaccount/sts/canvas-shards-lookupper-dev':
+    access_key: 'fake-access-key'
+    secret_key: 'fake-secret-key'
+    security_token: 'fake-security-token'
+  'sts/testaccount/sts/canvas-release-notes':
+    access_key: 'fake-access-key'
+    secret_key: 'fake-secret-key'
+    security_token: 'fake-security-token'
+  'app-canvas/data/secrets':
+    data:
+      canvas_security:
+        encryption_secret: "astringthatisactually32byteslong"
+        signing_secret: "astringthatisactually32byteslong"
+      lti_platform_storage:
+        signing_secret: "astringthatisactually32byteslong"
+#      canvas_cdn_creds:
+#        aws_access_key_id: <access_key_id>
+#        aws_secret_access_key: <secret_access_key>
+#      google_docs_creds:
+#        secret_key: so-secret
+#      immersive_reader:
+#        tenant_id: ""
+#        client_id: ""
+#        client_secret: ""
+#        subdomain: "canvasir"
+#      inst_access_signature:
+#        private_key: <signing private key in base 64>
+#        encryption_public_key: <encryption public key in base 64 [NOT SAME KEYPAIR AS SIGNATURE!]>
+      inst_fs:
+        app_host: "http://api.inst-fs.docker"
+        # this is just "super-sekret-value", base64-encoded:
+        secret: "c3VwZXItc2VrcmV0LXZhbHVlCg=="
+#      linked_in_creds:
+#        api_key: <api_key>
+#        secret_key: <secret_key>
+#      notification_service_creds:
+#        access_key_id: <access_key_id>
+#        secret_access_key: <secret_access_key>
+#      sentry_dsn: garbage-dsn-here
+#      sns_creds:
+#        access_key_id: <access_key_id>
+#        secret_access_key: <secret_access_key>
+#      twilio_creds:
+#        account_sid: <sid>
+#        auth_token: <token>
+#      twitter_creds:
+#        api_key: <apikey>
+#        secret_key: <secretkey>
+test:
+  'sts/testaccount/sts/canvas-shards-lookupper-test':
+    access_key: 'fake-access-key'
+    secret_key: 'fake-secret-key'
+    security_token: 'fake-security-token'
