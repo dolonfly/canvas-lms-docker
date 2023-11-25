@@ -1,0 +1,12 @@
+default: &default
+  storage: <%= ENV.fetch('FILE_STORAGE', 'local') %>
+  path_prefix: tmp/files
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+test:
+  <<: *default

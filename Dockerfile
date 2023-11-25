@@ -1,151 +1,139 @@
-ARG RUBY=3.1
-FROM instructure/ruby-passenger:$RUBY
-LABEL authors="dll"
+ARG NODE_VERSION=18
+ARG RUBY_VERSION=3.1
+ARG CANVAS_HOME=/opt/canvas
 
-ARG RUBY
-ARG POSTGRES_CLIENT=14
-ENV APP_HOME /usr/src/app/
-ENV RAILS_ENV development
-ENV NGINX_MAX_UPLOAD_SIZE 10g
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-ENV LC_CTYPE en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-ARG CANVAS_RAILS=7.0
-ENV CANVAS_RAILS=${CANVAS_RAILS}
+FROM node:${NODE_VERSION}-bookworm-slim AS node
 
-ENV NODE_MAJOR 18
+FROM ruby:${RUBY_VERSION}-bookworm AS builder
+
+ARG YARN_VERSION=1.22.19
+ARG BUNDLER_VERSION=2.4.22
+ARG CANVAS_HOME
+
 ENV NODE_OPTIONS=--openssl-legacy-provider
-ENV YARN_VERSION 1.19.1-1
-ENV GEM_HOME /home/docker/.gem/$RUBY
-ENV PATH ${APP_HOME}bin:$GEM_HOME/bin:$PATH
-ENV BUNDLE_APP_CONFIG /home/docker/.bundle
 
-WORKDIR $APP_HOME
+COPY --from=node /usr/local/bin/node /usr/local/bin
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-USER root
+RUN <<EOF
+ln -s /usr/local/bin/node /usr/local/bin/nodejs
+ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
-# aliyun
-#RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list &&\
-#    sed -i 's/# deb/deb/g' /etc/apt/sources.list  &&\
-#    apt-get clean && \
-#    apt-get update
+apt-get update
+apt-get install -y --no-install-recommends \
+    libidn-dev \
+    libxmlsec1-dev
 
-ARG USER_ID
-# This step allows docker to write files to a host-mounted volume with the correct user permissions.
-# Without it, some linux distributions are unable to write at all to the host mounted volume.
-RUN if [ -n "$USER_ID" ]; then usermod -u "${USER_ID}" docker \
-        && chown --from=9999 docker /usr/src/nginx /usr/src/app -R; fi
+npm update -g npm
+npm install -g yarn@${YARN_VERSION}
 
-RUN mkdir -p /etc/apt/keyrings \
-  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-  && printf 'path-exclude /usr/share/doc/*\npath-exclude /usr/share/man/*' > /etc/dpkg/dpkg.cfg.d/01_nodoc \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-  && curl -sS https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-  && apt-get update -qq \
-  && apt-get install -qqy --no-install-recommends \
-       nodejs \
-       yarn="$YARN_VERSION" \
-       libxmlsec1-dev \
-       python3-lxml \
-       python-is-python3 \
-       libicu-dev \
-       libidn11-dev \
-       parallel \
-       postgresql-client-$POSTGRES_CLIENT \
-       unzip \
-       pbzip2 \
-       fontforge \
-       git \
-       build-essential \
-      libgmp-dev \
-    ruby-dev \
-  && rm -rf /var/lib/apt/lists/* \
-  && mkdir -p /home/docker/.gem/ruby/$RUBY_MAJOR.0
+git clone -b zut-202311 --depth 1 https://github.com/dolonfly/canvas-lms.git ${CANVAS_HOME}
+EOF
 
-RUN gem install bundler --no-document -v 2.4.20 \
-  && find $GEM_HOME ! -user docker | xargs chown docker:docker
-RUN npm install -g npm@9.8.1 && npm cache clean --force
+WORKDIR ${CANVAS_HOME}
 
-USER docker
+RUN <<EOF
+yarn config set network-timeout 600000
+yarn config set network-concurrency 1
+yarn install # --pure-lockfile --ignore-optional
 
-RUN set -eux; \
-  mkdir -p \
-    .yardoc \
-    app/stylesheets/brandable_css_brands \
-    app/views/info \
-    config/locales/generated \
-    log \
+gem install bundler -v ${BUNDLER_VERSION} --no-document
+bundle install
+bundle exec rake canvas:compile_assets_dev
+
+rm -rf \
+    .git \
+    .github \
+    .storybook \
+    .vscode \
+    build \
+    doc \
+    docker-compose \
+    hooks \
+    inst-cli \
+    jest \
+    log/* \
     node_modules \
-    packages/canvas-planner/node_modules \
-    packages/jest-moxios-utils/node_modules \
-    packages/js-utils/es \
-    packages/js-utils/lib \
-    packages/js-utils/node_modules \
-    packages/k5uploader/es \
-    packages/k5uploader/lib \
-    packages/k5uploader/node_modules \
-    packages/old-copy-of-react-14-that-is-just-here-so-if-analytics-is-checked-out-it-doesnt-change-yarn.lock/node_modules \
-    pacts \
-    public/dist \
-    public/doc/api \
-    public/javascripts/translations \
-    reports \
-    tmp \
-    /home/docker/.bundle/ \
-    /home/docker/.cache/yarn \
-    /home/docker/.gem/
+    tmp/* \
+    ui \
+    ui-build
+rm \
+    .codeclimate.yml \
+    .dive-ci \
+    .dockerignore \
+    .editorconfig \
+    .eslintignore \
+    .eslintrc.js \
+    .git-blame-ignore-revs \
+    .gitignore \
+    .gitmessage \
+    .groovylintrc.json \
+    .i18nignore \
+    .i18nrc \
+    .irbrc \
+    .lintstagedrc.js \
+    .npmrc \
+    .nvmrc \
+    .prettierrc \
+    .rspec \
+    .rubocop.yml \
+    .sentryignore \
+    .stylelintrc \
+    .travis.yml \
+    CONTRIBUTING.md \
+    COPYRIGHT \
+    Dockerfile* \
+    Jenkinsfile* \
+    LICENSE \
+    README.md \
+    SECURITY.md \
+    bower.json \
+    code_of_conduct.md \
+    config/*.yml.* \
+    docker-compose* \
+    gulpfile.js \
+    issue_template.md \
+    jest.config.js \
+    karma.conf.js \
+    package.json \
+    tsconfig.json \
+    webpack.config.js \
+    yarn.lock
+EOF
 
-# get canvas and install
-RUN cd /tmp && git clone https://github.com/dolonfly/canvas-lms.git canvas
-WORKDIR /tmp/canvas
-RUN git branch --set-upstream-to origin/master
-RUN git checkout zut-202311
+COPY canvas ${CANVAS_HOME}
 
-RUN cp -ri /tmp/canvas/* $APP_HOME
+FROM ruby:${RUBY_VERSION}-slim-bookworm AS runner
 
-USER root
-WORKDIR $APP_HOME
+ARG CANVAS_HOME
+ARG CANVAS_USER=canvas
 
-# Automation jobs
-RUN ln -s ${APP_HOME}script/canvas_init /etc/init.d/canvas_init
-RUN update-rc.d canvas_init defaults
+RUN <<EOF
+apt-get update
+apt-get install -y --no-install-recommends \
+    git \
+    libbrotli1 \
+    libidn12 \
+    libpq5 \
+    libsqlite3-0 \
+    libxmlsec1-openssl
+apt-get clean
+rm -rf /var/lib/apt/lists/*
 
+groupadd ${CANVAS_USER}
+useradd -g ${CANVAS_USER} -d ${CANVAS_HOME} ${CANVAS_USER}
+EOF
 
-# copy config files
-RUN for config in amazon_s3 database \
-      delayed_jobs domain file_store outgoing_mail security external_migration; \
-      do cp config/$config.yml.example config/$config.yml; done
-RUN mkdir -p log tmp/pids public/assets app/stylesheets/brandable_css_brands
-RUN touch app/stylesheets/_brandable_variables_defaults_autogenerated.scss
-RUN touch Gemfile.lock
-RUN touch log/production.log
-RUN cp config/dynamic_settings.yml.example config/dynamic_settings.yml
-RUN cp config/database.yml.example config/database.yml
+COPY --from=builder --chown=${CANVAS_USER} ${GEM_HOME} ${GEM_HOME}
+COPY --from=builder --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
 
-# create canvas user
-RUN adduser --disabled-password --gecos canvas canvasuser
-RUN chown -R canvasuser config/environment.rb log tmp public/assets \
-                                  app/stylesheets/_brandable_variables_defaults_autogenerated.scss \
-                                  app/stylesheets/brandable_css_brands Gemfile.lock config.ru
+WORKDIR ${CANVAS_HOME}
 
-# install dependencies
-RUN yarn install --force --network-timeout 1000000
-ENV CANVAS_BUILD_CONCURRENCY=1
-ENV RAILS_ENV=production
-RUN locale-gen en_US.UTF-8
-RUN dpkg-reconfigure locales
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+USER ${CANVAS_USER}
 
-EXPOSE 80 443
-RUN bundle config set --local path vendor/bundle
-RUN ./script/install_assets.sh
-RUN bundle exec rake canvas:compile_assets
-ADD ./start.sh $APP_HOME/start.sh
-RUN chown canvasuser:canvasuser log/production.log
-RUN chmod -R 777 app/stylesheets && chmod -R 777 public/assets && chmod -R 777 public/stylesheets
+ENV RUBYLIB ${CANVAS_HOME}
+
+EXPOSE 3000
+
+CMD [ "bundle", "exec", "rails", "server", "-b", "0.0.0.0" ]

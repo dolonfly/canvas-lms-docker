@@ -1,0 +1,11 @@
+common: &common
+  host: <%= ENV.fetch('SELF_HOST_PREVIEW_SERVER_HOST', 'localhost:8152') %>
+
+production:
+  <<: *common
+
+development:
+  <<: *common
+
+test:
+  <<: *common
