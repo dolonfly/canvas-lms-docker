@@ -31,10 +31,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      - name: Set env
+        run: echo "DATE=$(date +%s)" >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:latest,${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:$(date +%s)
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:latest,${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:${{ env.DATE }}
           push: true
