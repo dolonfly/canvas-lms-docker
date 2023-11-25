@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set env
-        run: echo "DATE=$(date +%s)" >> $GITHUB_ENV
+        run: echo "DATE=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
