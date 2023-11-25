@@ -36,5 +36,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           file: Dockerfile
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:$(date +%s)
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms:$(date +%s)
           push: true
