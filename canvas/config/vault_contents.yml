@@ -18,7 +18,7 @@ development:
     data:
       canvas_security:
         encryption_secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
-        signing_secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
+        signing_secret: <%= ENV.fetch('ECOSYSTEM_SECRET') %>
       lti_platform_storage:
         signing_secret: "astringthatisactually32byteslong"
 #      canvas_cdn_creds:

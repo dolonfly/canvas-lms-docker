@@ -12,7 +12,7 @@ development:
       # environment
       canvas:
         encryption-secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
-        signing-secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
+        signing-secret: <%= ENV.fetch('ECOSYSTEM_SECRET') %>
         # regexes for matching online meeting urls in calendar events
         # one per line. will get | or'd together to form the regex
         # that's eventually used.
@@ -159,6 +159,6 @@ production:
     canvas:
       canvas:
         encryption-secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
-        signing-secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
+        signing-secret: <%= ENV.fetch('ECOSYSTEM_SECRET') %>
       rich-content-service:
         app-host: "localhost"
