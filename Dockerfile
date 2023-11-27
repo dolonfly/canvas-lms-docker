@@ -130,15 +130,15 @@ COPY --from=builder --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
 
 WORKDIR ${CANVAS_HOME}
 
+RUN chmod +x /opt/canvas/script/canvas_init
+RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
+RUN update-rc.d canvas_init defaults
+
 USER ${CANVAS_USER}
 
 ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 3000
-
-RUN chmod +x /opt/canvas/script/canvas_init
-RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
-RUN update-rc.d canvas_init defaults
 
 CMD ["/etc/init.d/canvas_init","start"]
 CMD [ "bundle", "exec", "rails", "server", "-b", "0.0.0.0" ]
