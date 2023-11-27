@@ -136,6 +136,7 @@ ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 3000
 
+RUN chmod +x /opt/canvas/script/canvas_init
 RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
 RUN update-rc.d canvas_init defaults
 
