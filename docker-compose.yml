@@ -58,7 +58,7 @@ services:
     environment:
       ECOSYSTEM_KEY: ${CANVAS_ECOSYSTEM_KEY}
       ECOSYSTEM_SECRET : ${CANVAS_ECOSYSTEM_SECRET}
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 3001
       STATSD_HOST: localhost
       STATSD_PORT: 3002
@@ -78,10 +78,10 @@ services:
         source: redis-volume
         target: /data
   doc_preview:
-    image: dolonfly/doc-preview:4.3.0
+    image: dolonfly/doc-preview
     container_name: doc-preview
     ports:
-      - '8012:8012'
+      - '8013:8012'
   smtp:
     image: mailhog/mailhog
     container_name: mailhog

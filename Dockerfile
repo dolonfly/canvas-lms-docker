@@ -136,4 +136,8 @@ ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 3000
 
+RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
+RUN update-rc.d canvas_init defaults
+
+CMD ["/etc/init.d/canvas_init","start"]
 CMD [ "bundle", "exec", "rails", "server", "-b", "0.0.0.0" ]
