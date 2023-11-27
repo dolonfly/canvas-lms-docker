@@ -141,4 +141,4 @@ ENV RUBYLIB ${CANVAS_HOME}
 EXPOSE 3000
 ADD ./start.sh /opt/canvas/start.sh
 RUN chmod +x /opt/canvas/start.sh
-ENTRYPOINT ["/opt/canvas/start.sh"]
+ENTRYPOINT ["sh","/opt/canvas/start.sh"]
