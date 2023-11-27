@@ -139,6 +139,5 @@ USER ${CANVAS_USER}
 ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 3000
-
-CMD ["/etc/init.d/canvas_init","start"]
-CMD [ "bundle", "exec", "rails", "server", "-b", "0.0.0.0" ]
+ADD ./start.sh /opt/canvas/start.sh
+ENTRYPOINT ["/opt/canvas/start.sh"]

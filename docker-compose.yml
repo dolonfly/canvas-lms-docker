@@ -81,12 +81,15 @@ services:
     image: dolonfly/doc-preview
     container_name: doc-preview
     ports:
-      - '8013:8012'
+      - '8012:8012'
   smtp:
     image: mailhog/mailhog
     container_name: mailhog
+    #this is optional
+    tty: true
     ports:
       - '8025:8025'
+      - '1025:1025'
   db:
     image: postgres:16-alpine
     container_name: postgres
