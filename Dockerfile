@@ -110,6 +110,9 @@ ARG CANVAS_HOME
 ARG CANVAS_USER=canvas
 
 RUN <<EOF
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+echo 'Asia/Shanghai' >/etc/timezone
+
 apt-get update
 apt-get install -y --no-install-recommends \
     git \
