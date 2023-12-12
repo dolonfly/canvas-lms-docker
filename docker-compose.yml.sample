@@ -37,6 +37,7 @@ services:
       S3_SK: ${S3_SK}
       S3_REGION: ${S3_REGION}
       S3_ENDPOINT: ${S3_ENDPOINT}
+      LES_APP_HOTS: ${LES_APP_HOTS}
     volumes:
       - type: volume
         source: app-volume
@@ -111,6 +112,10 @@ services:
       environment:
         VIRTUAL_HOST: kinesis.canvaslms.docker
         VIRTUAL_PORT: 4567
+  les:
+    image: dolonfly/canvas-les
+    ports:
+      - 3004:80
 volumes:
   app-volume:
   db-volume:
