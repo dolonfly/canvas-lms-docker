@@ -38,7 +38,7 @@ development:
         # Comment out or set to false to use the live events ecosystem
         # LTI 2 Originality Report tools will not work properly without
         # the live events ecosystem set up
-        disabled: false
+#        disabled: false
 #        app-host: "http://les.docker"
         app-host: <%= ENV.fetch('LES_APP_HOTS') %>
         sad-panda: null
