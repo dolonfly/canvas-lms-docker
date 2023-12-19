@@ -38,6 +38,9 @@ services:
       S3_REGION: ${S3_REGION}
       S3_ENDPOINT: ${S3_ENDPOINT}
       LES_APP_HOTS: ${LES_APP_HOTS}
+      use_kafka: ${use_kafka}
+      kafka_seed_brokers: ${kafka_seed_brokers}
+      kafka_broker_topic: ${kafka_broker_topic}
     volumes:
       - type: volume
         source: app-volume

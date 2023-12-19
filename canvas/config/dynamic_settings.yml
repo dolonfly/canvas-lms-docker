@@ -86,6 +86,9 @@ development:
         aws_access_key_id: key
         aws_secret_access_key_dec: secret
         # stub_credentials: true # can be used in dev to print creds to stdout
+        use_kafka: <%= ENV.fetch('use_kafka','false') %>
+        kafka_seed_brokers: <%= ENV.fetch('kafka_seed_brokers') %>
+        kafka_broker_topic: <%= ENV.fetch('kafka_broker_topic') %>
       # datadog_apm.yml: |
       #   sample_rate: 0.0
       #   host_sample_rate: 0.0
