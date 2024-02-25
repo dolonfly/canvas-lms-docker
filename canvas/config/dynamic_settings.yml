@@ -165,4 +165,4 @@ production:
         encryption-secret: <%= ENV.fetch('ECOSYSTEM_KEY') %>
         signing-secret: <%= ENV.fetch('ECOSYSTEM_SECRET') %>
       rich-content-service:
-        app-host: "localhost"
+        app-host: <%= ENV.fetch('RCE_APP_HOST','localhost:3001') %>
