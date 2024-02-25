@@ -176,5 +176,5 @@ EXPOSE 80 443
 RUN unlink /etc/apache2/sites-enabled/000-default.conf
 ADD ./apache/canvas.conf /etc/apache2/sites-enabled/canvas.conf
 
-ADD canvas/script/start-prod.sh.sh /opt/canvas/start.sh
+ADD ./canvas/script/start-prod.sh /opt/canvas/start.sh
 ENTRYPOINT ["sh","/opt/canvas/start.sh"]
