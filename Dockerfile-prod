@@ -117,7 +117,7 @@ EOF
 
 COPY canvas ${CANVAS_HOME}
 
-FROM ruby:${RUBY_VERSION}-bullseye AS runner
+FROM ruby:${RUBY_VERSION}-bookworm AS runner
 
 ARG CANVAS_HOME
 ARG CANVAS_USER=canvas
@@ -154,9 +154,9 @@ apt-get update
 apt-get install -y apache2
 apt-get install -y dirmngr gnupg apt-transport-https ca-certificates
 
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+curl https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/phusion.gpg >/dev/null
 # Add our APT repository
-sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger focal main > /etc/apt/sources.list.d/passenger.list'
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bookworm main > /etc/apt/sources.list.d/passenger.list'
 apt-get update
 
 # Install Passenger + Apache module
