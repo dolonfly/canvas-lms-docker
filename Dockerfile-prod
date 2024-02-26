@@ -150,7 +150,7 @@ RUN update-rc.d canvas_init defaults
 # apache
 RUN <<EOF
 apt-get update
-apt-get install -y  apache2
+apt-get install -y apache2
 apt-get install -y dirmngr gnupg apt-transport-https ca-certificates
 
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
@@ -163,7 +163,7 @@ apt-get install -y libapache2-mod-passenger
 
 a2enmod rewrite
 a2enmod passenger
-rm -rf /var/lib/apt/lists/*
+unlink /etc/apache2/sites-enabled/000-default.conf
 EOF
 
 
@@ -173,7 +173,6 @@ ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 80 443
 
-RUN unlink /etc/apache2/sites-enabled/000-default.conf
 ADD ./apache/canvas.conf /etc/apache2/sites-enabled/canvas.conf
 
 ADD ./canvas/script/start-prod.sh /opt/canvas/start.sh
