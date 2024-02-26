@@ -143,6 +143,7 @@ COPY --from=builder --chown=${CANVAS_USER} ${GEM_HOME} ${GEM_HOME}
 COPY --from=builder --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
 
 WORKDIR ${CANVAS_HOME}
+USER ${CANVAS_USER}
 
 RUN chmod +x /opt/canvas/script/canvas_init
 RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
@@ -167,9 +168,6 @@ a2enmod passenger
 unlink /etc/apache2/sites-enabled/000-default.conf
 EOF
 
-
-USER ${CANVAS_USER}
-
 ENV RUBYLIB ${CANVAS_HOME}
 
 EXPOSE 80 443
@@ -178,4 +176,7 @@ ADD ./apache/canvas.conf /etc/apache2/sites-enabled/canvas.conf
 
 ADD ./canvas/script/start-prod.sh /opt/canvas/start.sh
 ADD ./canvas/script/prod-db-initial.sh /opt/canvas/prod-db-initial.sh
+RUN chmod 755 /opt/canvas/prod-db-initial.sh
+RUN chmod 755 /opt/canvas/start.sh
+RUN a2ensite canvas
 ENTRYPOINT ["sh","/opt/canvas/start.sh"]
