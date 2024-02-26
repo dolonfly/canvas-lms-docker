@@ -143,7 +143,6 @@ COPY --from=builder --chown=${CANVAS_USER} ${GEM_HOME} ${GEM_HOME}
 COPY --from=builder --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
 
 WORKDIR ${CANVAS_HOME}
-USER ${CANVAS_USER}
 
 RUN chmod +x /opt/canvas/script/canvas_init
 RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
@@ -169,6 +168,7 @@ unlink /etc/apache2/sites-enabled/000-default.conf
 EOF
 
 ENV RUBYLIB ${CANVAS_HOME}
+#USER ${CANVAS_USER}
 
 EXPOSE 80 443
 
