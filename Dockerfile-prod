@@ -148,7 +148,6 @@ RUN chmod +x /opt/canvas/script/canvas_init
 RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
 RUN update-rc.d canvas_init defaults
 
-USER ${CANVAS_USER}
 # apache
 RUN <<EOF
 apt-get update
@@ -169,7 +168,7 @@ unlink /etc/apache2/sites-enabled/000-default.conf
 EOF
 
 ENV RUBYLIB ${CANVAS_HOME}
-#USER ${CANVAS_USER}
+USER ${CANVAS_USER}
 
 EXPOSE 80 443
 
