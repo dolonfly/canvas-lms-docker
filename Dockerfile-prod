@@ -34,6 +34,7 @@ EOF
 WORKDIR ${CANVAS_HOME}
 
 RUN <<EOF
+touch Gemfile.lock
 yarn config set network-timeout 600000
 yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
