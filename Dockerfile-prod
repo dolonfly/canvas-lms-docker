@@ -148,6 +148,7 @@ RUN chmod +x /opt/canvas/script/canvas_init
 RUN ln -s /opt/canvas/script/canvas_init /etc/init.d/canvas_init
 RUN update-rc.d canvas_init defaults
 
+USER ${CANVAS_USER}
 # apache
 RUN <<EOF
 apt-get update
