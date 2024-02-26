@@ -178,5 +178,5 @@ ADD ./canvas/script/start-prod.sh /opt/canvas/start.sh
 ADD ./canvas/script/prod-db-initial.sh /opt/canvas/prod-db-initial.sh
 RUN chmod 755 /opt/canvas/prod-db-initial.sh
 RUN chmod 755 /opt/canvas/start.sh
-RUN a2ensite canvas
+
 ENTRYPOINT ["sh","/opt/canvas/start.sh"]
