@@ -1,7 +1,7 @@
 ARG NODE_VERSION=18
 ARG RUBY_VERSION=3.1
 ARG CANVAS_HOME=/opt/canvas
-ARG BUNDLER_VERSION=2.5.6
+ARG BUNDLER_VERSION=2.5.3
 
 FROM node:${NODE_VERSION}-bookworm-slim AS node
 
@@ -29,7 +29,7 @@ apt-get install -y --no-install-recommends \
 npm update -g npm
 npm install -g yarn@${YARN_VERSION}
 
-git clone -b zut-202311 --depth 1 https://github.com/dolonfly/canvas-lms.git ${CANVAS_HOME}
+git clone -b canvas-self-customization --depth 1 https://github.com/dolonfly/canvas-lms.git ${CANVAS_HOME}
 EOF
 
 WORKDIR ${CANVAS_HOME}
