@@ -40,12 +40,9 @@ yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 
 gem install bundler -v ${BUNDLER_VERSION} --no-document
-gem install --default base64
-gem update --system
 
 bundle config set --local path vendor/bundle
 bundle install
-gem install --default base64
 
 yarn gulp rev
 #Generate Assets
@@ -99,7 +96,6 @@ rm \
     .rubocop.yml \
     .sentryignore \
     .stylelintrc \
-    .travis.yml \
     CONTRIBUTING.md \
     COPYRIGHT \
     Dockerfile* \
@@ -131,8 +127,6 @@ ARG BUNDLER_VERSION
 
 RUN <<EOF
 gem install bundler -v ${BUNDLER_VERSION} --no-document
-gem install --default base64
-gem update --system
 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo 'Asia/Shanghai' >/etc/timezone
