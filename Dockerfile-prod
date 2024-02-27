@@ -34,8 +34,6 @@ EOF
 WORKDIR ${CANVAS_HOME}
 
 RUN <<EOF
-touch Gemfile.lock
-touch Gemfile.rails71.lock
 yarn config set network-timeout 600000
 yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
@@ -128,6 +126,7 @@ ARG CANVAS_HOME
 ARG CANVAS_USER=canvas
 
 RUN <<EOF
+gem install --default base64
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo 'Asia/Shanghai' >/etc/timezone
 
