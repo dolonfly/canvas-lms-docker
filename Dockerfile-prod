@@ -44,6 +44,7 @@ gem install --default base64
 
 bundle config set --local path vendor/bundle
 bundle install
+gem install --default base64
 
 yarn gulp rev
 #Generate Assets
