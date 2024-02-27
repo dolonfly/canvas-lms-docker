@@ -41,6 +41,7 @@ yarn install # --pure-lockfile --ignore-optional
 
 gem install bundler -v ${BUNDLER_VERSION} --no-document
 gem install --default base64
+gem update --system
 
 bundle config set --local path vendor/bundle
 bundle install
@@ -131,6 +132,7 @@ ARG BUNDLER_VERSION
 RUN <<EOF
 gem install bundler -v ${BUNDLER_VERSION} --no-document
 gem install --default base64
+gem update --system
 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo 'Asia/Shanghai' >/etc/timezone
