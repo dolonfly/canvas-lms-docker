@@ -40,6 +40,8 @@ yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 
 gem install bundler -v ${BUNDLER_VERSION} --no-document
+bundle clean --force
+gem update
 bundle config set --local path vendor/bundle
 bundle install
 
