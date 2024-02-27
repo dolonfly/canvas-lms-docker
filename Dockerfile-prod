@@ -1,5 +1,5 @@
 ARG NODE_VERSION=18
-ARG RUBY_VERSION=3.3
+ARG RUBY_VERSION=3.1.0
 ARG CANVAS_HOME=/opt/canvas
 
 FROM node:${NODE_VERSION}-bookworm-slim AS node
@@ -35,11 +35,13 @@ WORKDIR ${CANVAS_HOME}
 
 RUN <<EOF
 touch Gemfile.lock
+touch Gemfile.rails71.lock
 yarn config set network-timeout 600000
 yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 
 gem install bundler -v ${BUNDLER_VERSION} --no-document
+gem install --default base64
 bundle clean --force
 bundle config set --local path vendor/bundle
 bundle install
