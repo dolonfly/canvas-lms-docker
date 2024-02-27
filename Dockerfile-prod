@@ -1,13 +1,14 @@
 ARG NODE_VERSION=18
 ARG RUBY_VERSION=3.1
 ARG CANVAS_HOME=/opt/canvas
+ARG BUNDLER_VERSION=2.5.6
 
 FROM node:${NODE_VERSION}-bookworm-slim AS node
 
 FROM ruby:${RUBY_VERSION}-bookworm AS builder
 
 ARG YARN_VERSION=1.22.19
-ARG BUNDLER_VERSION=2.5.6
+ARG BUNDLER_VERSION
 ARG CANVAS_HOME
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
@@ -124,6 +125,7 @@ FROM ruby:${RUBY_VERSION}-bookworm AS runner
 
 ARG CANVAS_HOME
 ARG CANVAS_USER=canvas
+ARG BUNDLER_VERSION
 
 RUN <<EOF
 gem install bundler -v ${BUNDLER_VERSION} --no-document
