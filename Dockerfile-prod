@@ -43,6 +43,8 @@ gem install bundler -v ${BUNDLER_VERSION} --no-document
 
 bundle config set --local path vendor/bundle
 bundle install
+gem update --system
+gem update
 
 yarn gulp rev
 #Generate Assets
@@ -126,8 +128,6 @@ ARG CANVAS_USER=canvas
 ARG BUNDLER_VERSION
 
 RUN <<EOF
-gem install bundler -v ${BUNDLER_VERSION} --no-document
-
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo 'Asia/Shanghai' >/etc/timezone
 
