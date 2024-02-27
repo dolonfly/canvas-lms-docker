@@ -40,7 +40,7 @@ yarn install # --pure-lockfile --ignore-optional
 
 gem install bundler -v ${BUNDLER_VERSION} --no-document
 gem install --default base64
-bundle clean --force
+
 bundle config set --local path vendor/bundle
 bundle install
 
@@ -126,7 +126,9 @@ ARG CANVAS_HOME
 ARG CANVAS_USER=canvas
 
 RUN <<EOF
+gem install bundler -v ${BUNDLER_VERSION} --no-document
 gem install --default base64
+
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo 'Asia/Shanghai' >/etc/timezone
 
