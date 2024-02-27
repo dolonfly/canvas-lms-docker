@@ -185,6 +185,6 @@ ADD ./apache/canvas.conf /etc/apache2/sites-enabled/canvas.conf
 ADD ./canvas/script/start-prod.sh /opt/canvas/start.sh
 ADD ./canvas/script/prod-db-initial.sh /opt/canvas/prod-db-initial.sh
 
-USER ${CANVAS_USER}
+#USER ${CANVAS_USER}
 
 ENTRYPOINT ["sh","/opt/canvas/start.sh"]
