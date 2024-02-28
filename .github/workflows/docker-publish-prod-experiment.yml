@@ -38,6 +38,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          file: Dockerfile-prod
+          file: Dockerfile-prod-experiment
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms-prod-experiment:latest,${{ secrets.DOCKERHUB_USERNAME }}/canvas-lms-prod-experiment:${{ env.DATE }}
           push: true
