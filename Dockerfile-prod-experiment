@@ -1,10 +1,5 @@
-ARG NODE_VERSION=18
-ARG RUBY_VERSION=3.1
-
 ARG CANVAS_USER=app
 ARG CANVAS_HOME=/home/app/canvas
-
-ARG BUNDLER_VERSION=2.5.3
 
 FROM phusion/passenger-customizable:3.0.2 as builderx
 # Set correct environment variables.
@@ -99,31 +94,3 @@ rm \
     webpack.config.js \
     yarn.lock
 EOF
-
-
-FROM phusion/passenger-ruby31:3.0.2 as runnerx
-# Set correct environment variables.
-ENV HOME /root
-
-# Use baseimage-docker's init process.
-CMD ["/sbin/my_init"]
-
-ARG CANVAS_USER
-ARG CANVAS_HOME
-
-WORKDIR ${CANVAS_HOME}
-
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-
-COPY --from=builderx --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
-RUN chmod +x /home/app/canvas/script/canvas_init
-RUN ln -s /home/app/canvas/script/canvas_init /etc/my_init.d/canvas_init
-RUN update-rc.d canvas_init defaults
-
-# Using Nginx and Passenger
-RUN rm -f /etc/service/nginx/down
-RUN rm /etc/nginx/sites-enabled/default
-ADD nginx/canvas.conf /etc/nginx/sites-enabled/canvas.conf
-ADD nginx/gzip_max.conf /etc/nginx/conf.d/gzip_max.conf
-
-EXPOSE 80 443
