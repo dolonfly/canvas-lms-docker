@@ -1,13 +1,13 @@
 ARG CANVAS_USER=app
 ARG CANVAS_HOME=/home/app/canvas
 
-FROM phusion/passenger-customizable:3.0.2 as ROOTIMG
+FROM phusion/passenger-customizable:3.0.2 as baseimg
 RUN apt-get install -y libldap2-dev libidn11-dev libxmlsec1 ruby-dev zlib1g-dev build-essential libpq-dev libssl-dev redis-server libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev zlib1g-dev libxml2-dev libsqlite3-dev libpq-dev libxmlsec1-dev make g++ libxslt1-dev libcurl4-openssl-dev libffi-dev
 
 RUN /pd_build/ruby-3.1.*.sh
 RUN bash -lc 'rvm --default use ruby-3.1.4'
 
-FROM ROOTIMG as builderx
+FROM baseimg as builderx
 # Set correct environment variables.
 ENV HOME /root
 
@@ -101,7 +101,7 @@ rm \
 EOF
 
 
-FROM ROOTIMG as runnerx
+FROM baseimg as runnerx
 # Set correct environment variables.
 ENV HOME /root
 
