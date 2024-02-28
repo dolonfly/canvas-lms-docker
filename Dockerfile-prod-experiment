@@ -10,6 +10,7 @@ ARG CANVAS_HOME
 
 RUN /pd_build/nodejs.sh 18
 RUN /pd_build/ruby-3.1.*.sh
+RUN bash -lc 'rvm --default use ruby-3.1.4'
 
 WORKDIR ${CANVAS_HOME}
 RUN <<EOF
@@ -34,7 +35,7 @@ chown -R ${CANVAS_USER} config/environment.rb log tmp public/assets \
 
 RAILS_ENV=production bundle exec rake canvas:compile_assets
 #RAILS_ENV=production bundle exec rails js:webpack_production
-chown -R ${CANVAS_USER} public/dist/brandable_css
+#chown -R ${CANVAS_USER} public/dist/brandable_css
 
 rm -rf \
     .git \
@@ -104,6 +105,7 @@ ARG CANVAS_USER
 ARG CANVAS_HOME
 
 RUN /pd_build/ruby-3.1.*.sh
+RUN bash -lc 'rvm --default use ruby-3.1.4'
 
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]
