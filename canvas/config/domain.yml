@@ -2,7 +2,7 @@ default: &default
   domain: <%= ENV.fetch('CANVAS_LMS_DOMAIN') %>
   # whether this instance of canvas is served over ssl (https) or not
   # defaults to true for production, false for test/development
-  ssl: false
+#  ssl: false
   # files_domain: "canvasfiles.example.com"
 
 production:
