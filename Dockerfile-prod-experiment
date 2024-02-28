@@ -42,7 +42,6 @@ chown -R ${CANVAS_USER} config/environment.rb log tmp public/assets \
 RAILS_ENV=production bundle exec rake canvas:compile_assets
 #RAILS_ENV=production bundle exec rails js:webpack_production
 #chown -R ${CANVAS_USER} public/dist/brandable_css
-COPY canvas ${CANVAS_HOME}
 
 rm -rf \
     .git \
@@ -102,7 +101,7 @@ rm \
     webpack.config.js \
     yarn.lock
 EOF
-
+COPY canvas ${CANVAS_HOME}
 
 FROM baseimg as runnerx
 # Set correct environment variables.
@@ -114,8 +113,6 @@ ARG CANVAS_HOME
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]
 
-ARG CANVAS_USER
-ARG CANVAS_HOME
 
 WORKDIR ${CANVAS_HOME}
 
