@@ -1,3 +1,3 @@
 services:
   web:
-    image: dolonfly/canvas-lms-prod-experiment:2024-02-28-17-03
+    image: dolonfly/canvas-lms-prod-experiment:2024-03-02-15-21
