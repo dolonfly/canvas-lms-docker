@@ -98,7 +98,6 @@ rm \
     karma.conf.js \
     package.json \
     tsconfig.json \
-    webpack.config.js \
     yarn.lock
 EOF
 COPY canvas ${CANVAS_HOME}
