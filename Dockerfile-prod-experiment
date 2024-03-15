@@ -122,6 +122,10 @@ RUN chmod +x /home/app/canvas/script/canvas_init
 RUN ln -s /home/app/canvas/script/canvas_init /etc/init.d/canvas_init
 RUN update-rc.d canvas_init defaults
 
+RUN mkdir -p /etc/my_init.d
+RUN cp /home/app/canvas/script/canvas_init /etc/my_init.d/canvas_init
+RUN chmod +x /etc/my_init.d/canvas_init
+
 # Using Nginx and Passenger
 RUN rm -f /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
