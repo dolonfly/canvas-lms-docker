@@ -119,8 +119,14 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shangh
 
 COPY --from=builderx --chown=${CANVAS_USER} ${CANVAS_HOME} ${CANVAS_HOME}
 RUN chmod +x /home/app/canvas/script/canvas_init
+RUN ln -s /home/app/canvas/script/canvas_init /etc/init.d/canvas_init
+RUN update-rc.d canvas_init defaults
+
 RUN mkdir -p /etc/my_init.d
-RUN ln -s /home/app/canvas/script/canvas_init /etc/my_init.d/canvas_init
+RUN echo '#!/bin/sh\n/etc/init.d/canvas_init start' > /etc/my_init.d/canvas_delay_job.sh
+RUN chmod +x /etc/my_init.d/canvas_delay_job.sh
+
+
 
 
 # Using Nginx and Passenger
