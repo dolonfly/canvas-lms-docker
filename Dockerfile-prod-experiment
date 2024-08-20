@@ -8,6 +8,7 @@ RUN /pd_build/ruby-3.1.*.sh
 RUN bash -lc 'rvm --default use ruby-3.1.6'
 RUN gem update --system
 RUN gem update
+RUN bundle --version
 
 RUN /pd_build/redis.sh
 RUN rm -f /etc/service/redis/down
