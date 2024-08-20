@@ -26,6 +26,7 @@ yarn config set network-timeout 600000
 yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 
+bundle --version
 bundle config set --local path vendor/bundle
 bundle install
 
