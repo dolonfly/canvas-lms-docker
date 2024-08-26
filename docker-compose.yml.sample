@@ -46,6 +46,8 @@ services:
       - type: volume
         source: app-volume
         target: /opt/canvas/tmp/files
+      - canvas-brand_assets-volume:/home/app/canvas/public/dist/brand_assets
+      - canvas-brandable_css-volume:/home/app/canvas/public/dist/brandable_css
     depends_on:
       redis:
         condition: service_healthy
@@ -124,3 +126,15 @@ volumes:
   app-volume:
   db-volume:
   redis-volume:
+  canvas-brandable_css-volume:
+      driver: local
+      driver_opts:
+        type: none
+        o: bind
+        device: ${PWD}/mixed/mount/brand_css
+  canvas-brand_assets-volume:
+      driver: local
+      driver_opts:
+        type: none
+        o: bind
+        device: ${PWD}/mixed/mount/brand_assets
