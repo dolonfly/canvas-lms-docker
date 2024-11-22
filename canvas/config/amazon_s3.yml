@@ -3,7 +3,7 @@ default: &default
   access_key_id: <%= ENV.fetch('S3_AK') %>
   secret_access_key: <%= ENV.fetch('S3_SK') %>
   region: <%= ENV.fetch('S3_REGION', 'us-east-1') %>
-  force_path_style: false #If your storage use path-style bucket addresses.
+  force_path_style: true #If your storage use path-style bucket addresses.
   endpoint: <%= ENV.fetch('S3_ENDPOINT') %>
 development:
   <<: *default
