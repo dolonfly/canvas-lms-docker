@@ -32,7 +32,7 @@ yarn install # --pure-lockfile --ignore-optional
 echo '======> begin bundle install'
 bundle --version
 bundle config set --local path vendor/bundle
-bundle install
+bundle install --path vendor/bundle
 echo '======> begin gulp rev'
 yarn gulp rev
 yarn run build:css
