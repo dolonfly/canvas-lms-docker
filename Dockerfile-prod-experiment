@@ -68,7 +68,7 @@ rm -rf \
     tmp/* \
     ui \
     ui-build
-rm \
+rm -f \
     .codeclimate.yml \
     .dive-ci \
     .dockerignore \
