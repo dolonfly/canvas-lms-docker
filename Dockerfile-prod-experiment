@@ -35,6 +35,7 @@ gem install bundler --version 2.5.10
 bundle --version
 #bundle config set --local deployment 'true'
 bundle config set --local path vendor/bundle
+bundle install
 echo '======> begin gulp rev'
 yarn gulp rev
 yarn run build:css
