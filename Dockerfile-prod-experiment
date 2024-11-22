@@ -6,8 +6,8 @@ RUN apt-get update && apt-get install -y libldap2-dev libidn11-dev libxmlsec1 ru
 
 RUN /pd_build/ruby-3.3.*.sh
 RUN #bash -lc 'rvm --default use ruby-3.3.3'
-#RUN gem update --system
-#RUN gem update
+RUN gem update --system
+RUN gem update
 RUN bundle --version
 
 RUN /pd_build/redis.sh
@@ -31,8 +31,9 @@ yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 echo '======> begin bundle install'
 bundle --version
+gem install bundler
+bundle config set --local deployment 'true'
 bundle config set --local path vendor/bundle
-bundle install --path vendor/bundle
 echo '======> begin gulp rev'
 yarn gulp rev
 yarn run build:css
