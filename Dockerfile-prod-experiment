@@ -5,7 +5,7 @@ FROM phusion/passenger-customizable:3.0.7 as baseimg
 RUN apt-get update && apt-get install -y libldap2-dev libidn11-dev libxmlsec1 ruby-dev zlib1g-dev build-essential libpq-dev libssl-dev redis-server libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev zlib1g-dev libxml2-dev libsqlite3-dev libpq-dev libxmlsec1-dev make g++ libxslt1-dev libcurl4-openssl-dev libffi-dev
 
 RUN /pd_build/ruby-3.3.*.sh
-RUN #bash -lc 'rvm --default use ruby-3.3.3'
+#RUN bash -lc 'rvm --default use ruby-3.3.3'
 RUN gem update --system
 RUN gem update
 RUN bundle --version
@@ -31,8 +31,9 @@ yarn config set network-concurrency 1
 yarn install # --pure-lockfile --ignore-optional
 echo '======> begin bundle install'
 bundle --version
-gem install bundler
-bundle config set --local deployment 'true'
+gem install bundler --version 2.5.10
+bundle --version
+#bundle config set --local deployment 'true'
 bundle config set --local path vendor/bundle
 echo '======> begin gulp rev'
 yarn gulp rev
