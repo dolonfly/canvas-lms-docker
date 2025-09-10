@@ -5,9 +5,9 @@ FROM phusion/passenger-customizable:3.1.3 as baseimg
 RUN apt-get update && apt-get install -y libldap2-dev libidn11-dev libxmlsec1 ruby-dev zlib1g-dev build-essential libpq-dev libssl-dev redis-server libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev zlib1g-dev libxml2-dev libsqlite3-dev libpq-dev libxmlsec1-dev make g++ libxslt1-dev libcurl4-openssl-dev libffi-dev shared-mime-info
 
 RUN /pd_build/ruby-3.4.*.sh
-#RUN bash -lc 'rvm --default use ruby-3.3.3'
+RUN bash -lc 'rvm --default use ruby-3.4.1'
 RUN gem update --system
-RUN gem update
+RUN #gem update
 RUN bundle --version
 
 RUN /pd_build/redis.sh
@@ -26,7 +26,7 @@ WORKDIR ${CANVAS_HOME}
 RUN <<EOF
 #git clone -b canvas-self-customization --depth 1 https://github.com/dolonfly/canvas-lms.git ${CANVAS_HOME}
 git clone -b prod --depth 1 https://github.com/instructure/canvas-lms.git ${CANVAS_HOME}
-rm -rf *.lock
+#rm -rf *.lock
 
 yarn config set network-timeout 600000
 yarn config set network-concurrency 1
